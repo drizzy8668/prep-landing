@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /
+
+# Paid-traffic-only landing (Meta / Yandex Direct / Google Ads).
+# Not indexed, so it doesn't compete with prep.uz / kurs.prep.uz for organic.
