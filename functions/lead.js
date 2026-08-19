@@ -3,11 +3,9 @@
 // Same pattern as v1, extended to carry goals/region/age from
 // the multi-step form into amoCRM tags and custom fields.
 //
-// SARDOR — set in Cloudflare Pages → Settings → Environment variables:
-//   AMOCRM_SUBDOMAIN, AMOCRM_ACCESS_TOKEN, AMOCRM_PIPELINE_ID
-//   AMOCRM_STATUS_NAME — e.g. "Форма 1" (same stage used by kurs.prep.uz).
-//     If you'd rather hardcode the numeric id, set AMOCRM_STATUS_ID instead
-//     and it takes priority over the name lookup.
+// SARDOR — Cloudflare env vars (Settings → Variables and secrets):
+//   AMOCRM_SUBDOMAIN, AMOCRM_ACCESS_TOKEN, AMOCRM_PIPELINE_ID, AMOCRM_STATUS_NAME
+//   (optional) AMOCRM_STATUS_ID — takes priority over AMOCRM_STATUS_NAME if set
 //   (optional) META_PIXEL_ID, META_ACCESS_TOKEN
 // ============================================================
 
