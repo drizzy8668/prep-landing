@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openVideoModal(videoId) {
     videoModalFrame.innerHTML =
-      `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0"
-        title="Talaba fikri" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+      `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&playsinline=1&rel=0"
+        title="Talaba fikri" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
     videoModal.hidden = false;
     document.body.style.overflow = 'hidden';
   }
