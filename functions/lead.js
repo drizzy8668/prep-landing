@@ -23,18 +23,36 @@ let cachedStatusId = null;
 async function resolveStatusId(env) {
   if (env.AMOCRM_STATUS_ID) return Number(env.AMOCRM_STATUS_ID);
   if (cachedStatusId) return cachedStatusId;
-  if (!env.AMOCRM_STATUS_NAME || !env.AMOCRM_PIPELINE_ID) return null;
+  if (!env.AMOCRM_STATUS_NAME) {
+    console.error('AMOCRM_STATUS_NAME is not set');
+    return null;
+  }
+  if (!env.AMOCRM_PIPELINE_ID) {
+    console.error('AMOCRM_PIPELINE_ID is not set');
+    return null;
+  }
 
-  const res = await fetch(
-    `https://${env.AMOCRM_SUBDOMAIN}.amocrm.ru/api/v4/leads/pipelines/${env.AMOCRM_PIPELINE_ID}`,
-    { headers: { 'Authorization': `Bearer ${env.AMOCRM_ACCESS_TOKEN}` } }
-  );
-  if (!res.ok) return null;
+  const url = `https://${env.AMOCRM_SUBDOMAIN}.amocrm.ru/api/v4/leads/pipelines/${env.AMOCRM_PIPELINE_ID}`;
+  const res = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${env.AMOCRM_ACCESS_TOKEN}` },
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    console.error(`amoCRM pipeline fetch failed: ${res.status} ${url} — ${errText}`);
+    return null;
+  }
   const data = await res.json();
   const statuses = data?._embedded?.statuses || [];
   const match = statuses.find(s => s.name === env.AMOCRM_STATUS_NAME);
-  if (match) cachedStatusId = match.id;
-  return match ? match.id : null;
+  if (!match) {
+    console.error(
+      `No status named "${env.AMOCRM_STATUS_NAME}" in pipeline ${env.AMOCRM_PIPELINE_ID}. ` +
+      `Available: ${statuses.map(s => `"${s.name}" (id ${s.id})`).join(', ')}`
+    );
+    return null;
+  }
+  cachedStatusId = match.id;
+  return match.id;
 }
 
 export async function onRequestPost(context) {
