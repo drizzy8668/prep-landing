@@ -31,6 +31,32 @@ document.addEventListener('DOMContentLoaded', () => {
     nextBtn.addEventListener('click', () => reviewGrid.scrollBy({ left: scrollStep(), behavior: 'smooth' }));
   }
 
+  /* ---------- Video lightbox (YouTube testimonials) ---------- */
+  const videoModal = document.getElementById('videoModal');
+  const videoModalFrame = document.getElementById('videoModalFrame');
+
+  function openVideoModal(videoId) {
+    videoModalFrame.innerHTML =
+      `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0"
+        title="Talaba fikri" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    videoModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVideoModal() {
+    videoModal.hidden = true;
+    videoModalFrame.innerHTML = ''; // stops playback
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.review-card[data-video-id]').forEach(card => {
+    card.addEventListener('click', () => openVideoModal(card.dataset.videoId));
+  });
+  document.querySelectorAll('[data-video-close]').forEach(el => {
+    el.addEventListener('click', closeVideoModal);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoModal && !videoModal.hidden) closeVideoModal();
+  });
+
   /* ---------- Countdown timer (soft urgency nudge, mirrors the proven funnel) ----------
      SARDOR: change TIMER_SECONDS or remove the timer-row from index.html
      if you'd rather not show a countdown at all. */
