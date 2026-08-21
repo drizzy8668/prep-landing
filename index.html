@@ -273,10 +273,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-MMTSF3FV');</script>
 <!-- End Google Tag Manager -->
 
-<!-- ==================== Meta Pixel ====================
-Placeholder — new Pixel ID for this domain. CAPI wired via /functions/lead.js.
-Remember: never leave a hardcoded test_event_code in production (prep-talim.uz bug).
-======================================================== -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1376555783862292');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1376555783862292&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -732,7 +744,13 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.textContent = 'Yuborilmoqda...';
 
     const params = new URLSearchParams(window.location.search);
+
+    // Shared id so the browser Pixel event and the server-side CAPI event
+    // (fired in functions/lead.js) are deduplicated by Meta instead of double-counted.
+    const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+
     const payload = {
+      event_id: eventId,
       name: document.getElementById('nameField').value.trim(),
       phone: document.getElementById('phoneField').value.replace(/\s/g, ''),
       goals: Array.from(selectedGoals),
@@ -760,7 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: 'lead_submit', lead_source: payload.utm_source || 'direct' });
-      // if (typeof fbq === 'function') fbq('track', 'Lead');
+      if (typeof fbq === 'function') fbq('track', 'Lead', {}, { eventID: eventId });
 
       form.hidden = true;
       document.getElementById('formSuccess').hidden = false;
