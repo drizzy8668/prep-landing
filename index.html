@@ -129,45 +129,11 @@ svg{display:block;}
   justify-content:center;
 }
 .review-grid::-webkit-scrollbar{ display:none; }
-.review-card{ flex:0 0 auto; width:250px; scroll-snap-align:start; border-radius:var(--radius); overflow:hidden;
+.review-card{ flex:0 0 auto; width:280px; scroll-snap-align:start; border-radius:var(--radius); overflow:hidden;
   border:1px solid var(--line); background:var(--white); padding:0; font-family:inherit; text-align:left; cursor:pointer; }
 .review-card:hover .review-play{ background:var(--white); transform:translate(-50%,-50%) scale(1.08); }
-@media(min-width:640px){ .review-card{ width:290px; } }
-
-/* Video lightbox */
-.video-modal{ position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center; padding:24px; }
-.video-modal-backdrop{ position:absolute; inset:0; background:rgba(20,24,31,0.85); }
-.video-modal-body{ position:relative; width:100%; max-width:400px; }
-.video-modal-frame{ position:relative; width:100%; aspect-ratio:9/16; border-radius:var(--radius); overflow:hidden; background:#000; }
-.video-modal-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
-.video-modal-close{
-  position:absolute; top:-46px; right:0; width:36px; height:36px; border-radius:50%;
-  background:rgba(255,255,255,0.15); color:#fff; border:none; display:flex; align-items:center; justify-content:center;
-}
-.video-modal-close svg{ width:18px; height:18px; }
-.video-modal-close:hover{ background:rgba(255,255,255,0.28); }
-.video-modal-hint{ text-align:center; color:#B9C0CC; font-size:13px; margin:14px 0 0; }
-
-.carousel-arrow{
-  position:absolute; top:38%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%;
-  background:var(--white); border:1px solid var(--line); box-shadow:var(--shadow);
-  display:flex; align-items:center; justify-content:center; color:var(--ink-soft); z-index:5;
-}
-.carousel-arrow svg{ width:18px; height:18px; }
-.carousel-arrow:hover{ border-color:var(--accent); color:var(--accent); }
-.carousel-prev{ left:-10px; }
-.carousel-next{ right:-10px; }
-@media(min-width:1220px){ .carousel-prev{ left:-22px; } .carousel-next{ right:-22px; } }
-@media(max-width:640px){ .carousel-arrow{ display:none; } }
-.review-thumb{ aspect-ratio:4/5; background:#14181F; display:flex; align-items:center; justify-content:center;
-  position:relative; overflow:hidden; }
-.review-thumb-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
-  filter:blur(20px) brightness(0.5); transform:scale(1.2); }
-.review-thumb-fg{ position:relative; width:100%; height:100%; object-fit:contain; z-index:1; }
-.review-play{ width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.9); display:flex;
-  align-items:center; justify-content:center; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); }
-.review-play svg{ width:18px; height:18px; color:var(--accent); margin-left:2px; }
-.review-name{ padding:12px 14px; font-size:14px; font-weight:700; }
+@media(min-width:640px){ .review-card{ width:320px; } }
+.review-card.is-playing{ cursor:default; }
 
 /* ---------- Multi-step form ---------- */
 .section-form{ background:var(--dark); color:#fff; }
@@ -388,17 +354,6 @@ Remember: never leave a hardcoded test_event_code in production (prep-talim.uz b
     </div>
   </section>
 
-  <!-- Video lightbox -->
-  <div class="video-modal" id="videoModal" hidden>
-    <div class="video-modal-backdrop" data-video-close></div>
-    <div class="video-modal-body">
-      <button class="video-modal-close" data-video-close aria-label="Yopish">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
-      <div class="video-modal-frame" id="videoModalFrame"></div>
-      <p class="video-modal-hint">Ovozni yoqish uchun pastdagi 🔊 belgisini bosing</p>
-    </div>
-  </div>
 
   <!-- ==================== MULTI-STEP FORM ==================== -->
   <section class="section section-form" id="lead-form">
@@ -572,30 +527,17 @@ document.addEventListener('DOMContentLoaded', () => {
     nextBtn.addEventListener('click', () => reviewGrid.scrollBy({ left: scrollStep(), behavior: 'smooth' }));
   }
 
-  /* ---------- Video lightbox (YouTube testimonials) ---------- */
-  const videoModal = document.getElementById('videoModal');
-  const videoModalFrame = document.getElementById('videoModalFrame');
-
-  function openVideoModal(videoId) {
-    videoModalFrame.innerHTML =
-      `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playsinline=1&rel=0"
-        title="Talaba fikri" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-    videoModal.hidden = false;
-    document.body.style.overflow = 'hidden';
-  }
-  function closeVideoModal() {
-    videoModal.hidden = true;
-    videoModalFrame.innerHTML = ''; // stops playback
-    document.body.style.overflow = '';
-  }
+  /* ---------- Inline video play (swaps thumbnail for player in place) ---------- */
   document.querySelectorAll('.review-card[data-video-id]').forEach(card => {
-    card.addEventListener('click', () => openVideoModal(card.dataset.videoId));
-  });
-  document.querySelectorAll('[data-video-close]').forEach(el => {
-    el.addEventListener('click', closeVideoModal);
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && videoModal && !videoModal.hidden) closeVideoModal();
+    card.addEventListener('click', () => {
+      if (card.classList.contains('is-playing')) return;
+      const videoId = card.dataset.videoId;
+      const thumb = card.querySelector('.review-thumb');
+      card.classList.add('is-playing');
+      thumb.innerHTML =
+        `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0"
+          title="Talaba fikri" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    });
   });
 
   /* ---------- Countdown timer (soft urgency nudge, mirrors the proven funnel) ----------
