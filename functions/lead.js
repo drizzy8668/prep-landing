@@ -124,6 +124,9 @@ export async function onRequestPost(context) {
       return new Response(JSON.stringify({ error: 'crm_failed' }), { status: 502 });
     }
 
+    if (!env.META_PIXEL_ID || !env.META_ACCESS_TOKEN) {
+      console.error('Meta CAPI skipped — META_PIXEL_ID or META_ACCESS_TOKEN not set in env');
+    }
     if (env.META_PIXEL_ID && env.META_ACCESS_TOKEN) {
       const capiPayload = {
         data: [{
@@ -140,13 +143,19 @@ export async function onRequestPost(context) {
         }],
       };
       try {
-        await fetch(`https://graph.facebook.com/v19.0/${env.META_PIXEL_ID}/events?access_token=${env.META_ACCESS_TOKEN}`, {
+        const capiRes = await fetch(`https://graph.facebook.com/v21.0/${env.META_PIXEL_ID}/events?access_token=${env.META_ACCESS_TOKEN}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(capiPayload),
         });
+        const capiBody = await capiRes.text();
+        if (!capiRes.ok) {
+          console.error(`Meta CAPI rejected: ${capiRes.status} — ${capiBody}`);
+        } else {
+          console.log(`Meta CAPI ok: ${capiBody}`);
+        }
       } catch (capiErr) {
-        console.error('Meta CAPI error', capiErr);
+        console.error('Meta CAPI network error', capiErr);
       }
     }
 
