@@ -66,7 +66,7 @@ export async function onRequestPost(context) {
   }
 
   const { name, phone, goals, region, age, source, utm_source, utm_medium, utm_campaign,
-          utm_content, utm_term, fbclid, yclid, gclid, page_url } = body;
+          utm_content, utm_term, fbclid, yclid, gclid, page_url, event_id } = body;
 
   if (!name || !phone || phone.replace(/\D/g, '').length < 12) {
     return new Response(JSON.stringify({ error: 'invalid_payload' }), { status: 400 });
@@ -128,10 +128,15 @@ export async function onRequestPost(context) {
       const capiPayload = {
         data: [{
           event_name: 'Lead',
+          // Same id the browser Pixel used — lets Meta deduplicate the pair.
+          event_id: event_id,
           event_time: Math.floor(Date.now() / 1000),
           action_source: 'website',
           event_source_url: page_url,
-          user_data: { ph: [await sha256(phone.replace(/\D/g, ''))] },
+          user_data: {
+            ph: [await sha256(phone.replace(/\D/g, ''))],
+            ...(fbclid ? { fbc: `fb.1.${Date.now()}.${fbclid}` } : {}),
+          },
         }],
       };
       try {
