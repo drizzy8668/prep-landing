@@ -137,17 +137,22 @@ svg{display:block;}
 }
 @media(min-width:640px){ .review-card{ width:300px; } }
 .review-card.is-playing{ cursor:default; }
+/* when a Short starts playing, expand the frame to portrait so it fills properly */
+.review-card.is-playing .review-thumb{ aspect-ratio:9/16; }
 
 .review-thumb{
   position:relative; width:100%; aspect-ratio:9/16; background:#14181F; overflow:hidden;
 }
-.review-thumb .review-thumb-bg,
+.review-thumb .review-thumb-bg{ display:none; }
 .review-thumb .review-thumb-fg{
   position:absolute; inset:0; width:100%; height:100%; display:block;
+  object-fit:cover; z-index:1;
 }
-.review-thumb .review-thumb-bg{ object-fit:cover; filter:blur(24px) brightness(0.45); transform:scale(1.3); }
-.review-thumb .review-thumb-fg{ object-fit:contain; z-index:1; }
 .review-thumb iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; z-index:3; }
+
+/* fallback: standard 16:9 cover couldn't be avoided — show it letterboxed, not cropped */
+.review-card.wide-cover .review-thumb{ aspect-ratio:16/9; }
+.review-card.wide-cover .review-thumb-fg{ object-fit:cover; object-position:center 30%; }
 
 .review-play{
   position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
@@ -358,31 +363,31 @@ Remember: never leave a hardcoded test_event_code in production (prep-talim.uz b
         </button>
         <div class="review-grid" id="reviewGrid">
           <button class="review-card" data-video-id="bAZagF4ysB8">
-            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/bAZagF4ysB8/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://img.youtube.com/vi/bAZagF4ysB8/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/bAZagF4ysB8/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://i.ytimg.com/vi/bAZagF4ysB8/oardefault.jpg" data-fallback="https://img.youtube.com/vi/bAZagF4ysB8/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
             <p class="review-name">PREP.UZ talabasi</p>
           </button>
           <button class="review-card" data-video-id="68Om7lKmpgU">
-            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/68Om7lKmpgU/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://img.youtube.com/vi/68Om7lKmpgU/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/68Om7lKmpgU/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://i.ytimg.com/vi/68Om7lKmpgU/oardefault.jpg" data-fallback="https://img.youtube.com/vi/68Om7lKmpgU/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
             <p class="review-name">PREP.UZ talabasi</p>
           </button>
           <button class="review-card" data-video-id="JVQAOitm3aU">
-            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/JVQAOitm3aU/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://img.youtube.com/vi/JVQAOitm3aU/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/JVQAOitm3aU/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://i.ytimg.com/vi/JVQAOitm3aU/oardefault.jpg" data-fallback="https://img.youtube.com/vi/JVQAOitm3aU/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
             <p class="review-name">PREP.UZ talabasi</p>
           </button>
           <button class="review-card" data-video-id="_ViNd1hBaUs">
-            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/_ViNd1hBaUs/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://img.youtube.com/vi/_ViNd1hBaUs/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/_ViNd1hBaUs/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://i.ytimg.com/vi/_ViNd1hBaUs/oardefault.jpg" data-fallback="https://img.youtube.com/vi/_ViNd1hBaUs/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
             <p class="review-name">PREP.UZ talabasi</p>
           </button>
           <button class="review-card" data-video-id="ZZyAyzhzN0k">
-            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/ZZyAyzhzN0k/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://img.youtube.com/vi/ZZyAyzhzN0k/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/ZZyAyzhzN0k/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://i.ytimg.com/vi/ZZyAyzhzN0k/oardefault.jpg" data-fallback="https://img.youtube.com/vi/ZZyAyzhzN0k/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
             <p class="review-name">PREP.UZ talabasi</p>
           </button>
           <button class="review-card" data-video-id="G_YIHrtX8e8">
-            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/G_YIHrtX8e8/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://img.youtube.com/vi/G_YIHrtX8e8/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/G_YIHrtX8e8/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://i.ytimg.com/vi/G_YIHrtX8e8/oardefault.jpg" data-fallback="https://img.youtube.com/vi/G_YIHrtX8e8/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
             <p class="review-name">PREP.UZ talabasi</p>
           </button>
           <button class="review-card" data-video-id="4NqGPORTxNg">
-            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/4NqGPORTxNg/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://img.youtube.com/vi/4NqGPORTxNg/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+            <div class="review-thumb"><img class="review-thumb-bg" src="https://img.youtube.com/vi/4NqGPORTxNg/hqdefault.jpg" alt="" loading="lazy"><img class="review-thumb-fg" src="https://i.ytimg.com/vi/4NqGPORTxNg/oardefault.jpg" data-fallback="https://img.youtube.com/vi/4NqGPORTxNg/hqdefault.jpg" alt="" loading="lazy"><div class="review-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
             <p class="review-name">PREP.UZ talabasi</p>
           </button>
         </div>
@@ -565,6 +570,16 @@ document.addEventListener('DOMContentLoaded', () => {
     prevBtn.addEventListener('click', () => reviewGrid.scrollBy({ left: -scrollStep(), behavior: 'smooth' }));
     nextBtn.addEventListener('click', () => reviewGrid.scrollBy({ left: scrollStep(), behavior: 'smooth' }));
   }
+
+  /* ---------- Thumbnail fallback (Shorts vertical cover -> standard cover) ---------- */
+  document.querySelectorAll('.review-thumb-fg[data-fallback]').forEach(img => {
+    img.addEventListener('error', function handle() {
+      img.removeEventListener('error', handle);
+      img.src = img.dataset.fallback;
+      // standard cover is 16:9 letterboxed, so let the card go wide for it
+      img.closest('.review-card')?.classList.add('wide-cover');
+    });
+  });
 
   /* ---------- Inline video play (swaps thumbnail for player in place) ---------- */
   document.querySelectorAll('.review-card[data-video-id]').forEach(card => {
