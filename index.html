@@ -124,16 +124,55 @@ svg{display:block;}
 /* Testimonials — horizontal scroll carousel */
 .carousel{ position:relative; }
 .review-grid{
-  display:flex; gap:16px; overflow-x:auto; padding-bottom:6px; margin:0 -24px; padding-left:24px; padding-right:24px;
+  display:flex; gap:16px; overflow-x:auto; padding:0 24px 6px; margin:0 -24px;
   scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none;
-  justify-content:center;
 }
 .review-grid::-webkit-scrollbar{ display:none; }
-.review-card{ flex:0 0 auto; width:280px; scroll-snap-align:start; border-radius:var(--radius); overflow:hidden;
-  border:1px solid var(--line); background:var(--white); padding:0; font-family:inherit; text-align:left; cursor:pointer; }
-.review-card:hover .review-play{ background:var(--white); transform:translate(-50%,-50%) scale(1.08); }
-@media(min-width:640px){ .review-card{ width:320px; } }
+
+.review-card{
+  flex:0 0 auto; width:260px; scroll-snap-align:start;
+  border-radius:var(--radius); overflow:hidden; border:1px solid var(--line);
+  background:var(--white); padding:0; font-family:inherit; text-align:left; cursor:pointer;
+  display:block;
+}
+@media(min-width:640px){ .review-card{ width:300px; } }
 .review-card.is-playing{ cursor:default; }
+
+.review-thumb{
+  position:relative; width:100%; aspect-ratio:9/16; background:#14181F; overflow:hidden;
+}
+.review-thumb .review-thumb-bg,
+.review-thumb .review-thumb-fg{
+  position:absolute; inset:0; width:100%; height:100%; display:block;
+}
+.review-thumb .review-thumb-bg{ object-fit:cover; filter:blur(24px) brightness(0.45); transform:scale(1.3); }
+.review-thumb .review-thumb-fg{ object-fit:contain; z-index:1; }
+.review-thumb iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; z-index:3; }
+
+.review-play{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:52px; height:52px; border-radius:50%; background:rgba(255,255,255,0.92);
+  display:flex; align-items:center; justify-content:center; z-index:2;
+  transition:transform .15s ease, background .15s ease;
+}
+.review-play svg{ width:20px; height:20px; color:var(--accent); margin-left:3px; }
+.review-card:hover .review-play{ background:#fff; transform:translate(-50%,-50%) scale(1.08); }
+.review-card.is-playing .review-play{ display:none; }
+
+.review-name{ padding:12px 14px; font-size:14px; font-weight:700; }
+
+.carousel-arrow{
+  position:absolute; top:calc(50% - 20px); transform:translateY(-50%);
+  width:44px; height:44px; border-radius:50%;
+  background:var(--white); border:1px solid var(--line); box-shadow:var(--shadow);
+  display:flex; align-items:center; justify-content:center; color:var(--ink-soft); z-index:5;
+}
+.carousel-arrow svg{ width:18px; height:18px; }
+.carousel-arrow:hover{ border-color:var(--accent); color:var(--accent); }
+.carousel-prev{ left:-10px; }
+.carousel-next{ right:-10px; }
+@media(min-width:1220px){ .carousel-prev{ left:-22px; } .carousel-next{ right:-22px; } }
+@media(max-width:640px){ .carousel-arrow{ display:none; } }
 
 /* ---------- Multi-step form ---------- */
 .section-form{ background:var(--dark); color:#fff; }
